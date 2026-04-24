@@ -1,14 +1,177 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER LOTTO 2026</title>
+    <style>
+        /* 기본 테마 및 사이버 배경 설정 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a12;
+            color: #fff;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* 사이버 그리드 배경 효과 */
+            background-image: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)),
+                linear-gradient(0deg, #121212 1px, transparent 1px),
+                linear-gradient(90deg, #121212 1px, transparent 1px);
+            background-size: 100% 2px, 3px 100%, 40px 40px, 40px 40px;
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            background: rgba(10, 10, 20, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #0ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+        }
+
+        /* 버튼 디자인 */
+        button {
+            background: transparent;
+            color: #0ff;
+            border: 2px solid #0ff;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            background: #0ff;
+            color: #000;
+            box-shadow: 0 0 30px #0ff;
+        }
+
+        /* 결과 영역 */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .lotto-set {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px;
+            border-bottom: 1px dashed rgba(0, 255, 255, 0.3);
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* 번호 공 디자인 */
+        .ball {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .ball:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 반응형 */
+        @media (max-width: 480px) {
+            .ball { width: 35px; height: 35px; font-size: 0.9rem; }
+            h1 { font-size: 1.8rem; letter-spacing: 5px; }
+        }
+    </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+
+<div class="container">
+    <h1>CYBER LOTTO</h1>
+    <button onclick="generateLotto()">Generate 5 Sets</button>
+    <div id="results" class="result-container">
+        </div>
+</div>
+
+<script>
+    // 네온 컬러 배열 (화려한 분위기 연출용)
+    const neonColors = [
+        '#ff0055', '#00ff99', '#00ccff', '#ffcc00', '#ff6600',
+        '#9900ff', '#ff00ff', '#00ffff', '#33ff00', '#ff3300'
+    ];
+
+    function generateLotto() {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // 초기화
+
+        for (let i = 0; i < 5; i++) {
+            const numbers = [];
+            while(numbers.length < 6) {
+                const r = Math.floor(Math.random() * 45) + 1;
+                if(numbers.indexOf(r) === -1) numbers.push(r);
+            }
+            
+            // 번호 정렬
+            numbers.sort((a, b) => a - b);
+
+            const setDiv = document.createElement('div');
+            setDiv.className = 'lotto-set';
+            setDiv.style.animationDelay = `${i * 0.1}s`;
+
+            numbers.forEach((num, index) => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.innerText = num;
+                
+                // 번호와 세트 순서에 따라 고유한 네온 색상 부여
+                const colorIndex = (num + (i * 7)) % neonColors.length;
+                const color = neonColors[colorIndex];
+                
+                ball.style.background = `radial-gradient(circle at 30% 30%, ${color}, #111)`;
+                ball.style.border = `2px solid ${color}`;
+                ball.style.boxShadow = `0 0 15px ${color}`;
+                
+                setDiv.appendChild(ball);
+            });
+
+            resultsDiv.appendChild(setDiv);
+        }
+    }
+</script>
+
 </body>
 </html>
