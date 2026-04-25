@@ -37,7 +37,7 @@ class MusicManager {
         // Bass Pulse Function
         const playBass = () => {
             if (!this.isPlaying) return;
-            const { osc, gain } = this.createOscillator('sawtooth', 55, 0.05); // A1
+            const { osc, gain } = this.createOscillator('sawtooth', 55, 0.15); // Increased from 0.05
             const filter = this.ctx.createBiquadFilter();
             filter.type = 'lowpass';
             filter.frequency.setValueAtTime(200, this.ctx.currentTime);
@@ -48,7 +48,7 @@ class MusicManager {
             filter.connect(gain);
 
             gain.gain.setValueAtTime(0, this.ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 0.05);
+            gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + 0.05); // Increased from 0.08
             gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
             
             osc.start();
@@ -58,9 +58,9 @@ class MusicManager {
         // Ambient Pad Function
         const playPad = (freq) => {
             if (!this.isPlaying) return;
-            const { osc, gain } = this.createOscillator('triangle', freq, 0.02);
+            const { osc, gain } = this.createOscillator('triangle', freq, 0.06); // Increased from 0.02
             gain.gain.setValueAtTime(0, this.ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.02, this.ctx.currentTime + 2);
+            gain.gain.linearRampToValueAtTime(0.06, this.ctx.currentTime + 2); // Increased from 0.02
             gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 4);
             osc.start();
             osc.stop(this.ctx.currentTime + 4.1);
@@ -88,7 +88,7 @@ class MusicManager {
 
     playSFX() {
         if (!this.ctx || !this.isPlaying) return;
-        const { osc, gain } = this.createOscillator('square', 880, 0.05);
+        const { osc, gain } = this.createOscillator('square', 880, 0.15);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
         osc.start();
         osc.stop(this.ctx.currentTime + 0.2);
