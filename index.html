@@ -3,26 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER LOTTO 2026</title>
-    <link rel="stylesheet" href="style.css">
+    <title>한국노총 전국공공노동조합연맹 건설노조 경기남부본부</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('집회.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .nav-scrolled {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #1a202c !important;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-<div class="container">
-    <!-- Audio Control UI -->
-    <div class="audio-controls">
-        <button id="audioToggle" class="btn-audio" onclick="toggleAudio()" title="Toggle Cyber Ambient Music">🔈</button>
-    </div>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 text-white bg-transparent">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="마크.jpg" alt="로고" class="h-10 w-10 object-contain bg-white rounded-full p-0.5">
+                <span class="font-bold text-lg tracking-tighter">전국공공노조 경기남부본부</span>
+            </div>
+            <div class="hidden md:flex gap-8 font-medium">
+                <a href="#home" class="hover:text-blue-400 transition">홈</a>
+                <a href="#about" class="hover:text-blue-400 transition">본부소개</a>
+                <a href="#gallery" class="hover:text-blue-400 transition">활동현황</a>
+                <a href="#contact" class="hover:text-blue-400 transition">오시는 길</a>
+            </div>
+        </div>
+    </nav>
 
-    <h1>CYBER LOTTO</h1>
-    <button class="btn-cyber" onclick="generateLotto()">Generate 5 Sets</button>
-    
-    <div id="results" class="result-container">
-        <!-- Results will be dynamically generated here -->
-    </div>
-</div>
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient h-screen flex items-center justify-center text-center text-white px-4">
+        <div class="max-w-4xl">
+            <h2 class="text-xl md:text-2xl font-light mb-4 tracking-widest">한국노총 전국공공산업노동조합</h2>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">건설산업분과<br><span class="text-blue-400">경기남부본부</span></h1>
+            <p class="text-lg md:text-xl font-light mb-8 opacity-90">건설노동자의 권익 보호와 고용 안정을 위해 앞장서겠습니다.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#about" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold transition">상세보기</a>
+                <a href="#contact" class="bg-white hover:bg-gray-100 text-blue-900 px-8 py-3 rounded-md font-bold transition">문의하기</a>
+            </div>
+        </div>
+    </section>
 
-<script type="module" src="main.js"></script>
+    <!-- Intro Section -->
+    <section id="about" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-blue-600 font-bold tracking-widest uppercase">Greetings</span>
+                    <h2 class="text-3xl font-bold mt-2 mb-6">노동의 가치가 존중받는 세상을 위하여</h2>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        반갑습니다. 한국노총 전국공공산업노동조합 건설산업분과 경기남부본부입니다. <br><br>
+                        우리 본부는 경기남부 지역 건설 현장의 열악한 노동 환경을 개선하고, 조합원들의 정당한 권리를 확보하기 위해 투쟁하고 있습니다. 우리는 하나된 힘으로 건설 노동자의 자부심을 지키고, 안전한 일터를 만들기 위해 멈추지 않고 전진할 것입니다.
+                    </p>
+                    <div class="border-l-4 border-blue-600 pl-6 py-2 italic font-medium text-lg">
+                        "함께하면 강합니다. 투쟁으로 쟁취합시다!"
+                    </div>
+                </div>
+                <div class="rounded-xl overflow-hidden shadow-2xl">
+                    <img src="단체.jpg" alt="경기남부본부 단체사진" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Activity Gallery -->
+    <section id="gallery" class="py-20 bg-gray-100 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">주요 활동 현황</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Activity 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
+                    <div class="h-64 overflow-hidden">
+                        <img src="임명식.jpg" alt="임명식" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-sm text-blue-500 font-bold">임명 및 조직강화</span>
+                        <h3 class="text-xl font-bold mt-2">간부 임명식 및 조직 정비</h3>
+                        <p class="text-gray-500 mt-2 text-sm">경기남부본부의 체계적인 조직 운영을 위한 임원 임명식 현장입니다.</p>
+                    </div>
+                </div>
+
+                <!-- Activity 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
+                    <div class="h-64 overflow-hidden">
+                        <img src="집회.jpg" alt="집회 현장" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-sm text-red-500 font-bold">투쟁 및 집회</span>
+                        <h3 class="text-xl font-bold mt-2">현장 권익 사수 결의대회</h3>
+                        <p class="text-gray-500 mt-2 text-sm">건설 현장의 부당 처우 개선과 생존권 사수를 위한 강력한 투쟁을 이어갑니다.</p>
+                    </div>
+                </div>
+
+                <!-- Activity 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
+                    <div class="h-64 overflow-hidden flex items-center justify-center bg-gray-200">
+                        <img src="마크.jpg" alt="본부 로고" class="w-48 h-48 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-sm text-green-500 font-bold">공식 상징</span>
+                        <h3 class="text-xl font-bold mt-2">경기남부본부 공식 기치</h3>
+                        <p class="text-gray-500 mt-2 text-sm">전국공공노조 연맹의 정신을 계승하며 지역 본부의 단결을 상징합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-blue-900 text-white rounded-3xl p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold mb-6">상담 및 가입 안내</h2>
+                    <p class="mb-8 opacity-80 leading-relaxed">
+                        건설 현장에서 겪는 부당한 대우, 임금 체불, 안전 문제 등 모든 고민을 함께 해결해 드립니다. <br>
+                        지금 바로 경기남부본부의 가족이 되어 정당한 권리를 찾으세요.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">📍</div>
+                            <p>경기도 성남시 중원구 마지로 284-1</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">📞</div>
+                            <p>대표전화: (지역번호) 000-0000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full bg-white text-gray-900 p-8 rounded-2xl shadow-lg">
+                    <!-- Success/Error Messages -->
+                    <div data-fs-success class="hidden mb-4 p-4 bg-green-100 text-green-700 rounded-md font-bold text-center">
+                        상담 신청이 정상적으로 접수되었습니다. 곧 연락드리겠습니다.
+                    </div>
+                    <div data-fs-error class="hidden mb-4 p-4 bg-red-100 text-red-700 rounded-md font-bold text-center">
+                        전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.
+                    </div>
+
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-2">성함</label>
+                            <input type="text" name="name" required data-fs-field class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="성함을 입력하세요">
+                            <span data-fs-error="name" class="text-xs text-red-500 mt-1"></span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">연락처</label>
+                            <input type="tel" name="phone" required data-fs-field class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="010-0000-0000">
+                            <span data-fs-error="phone" class="text-xs text-red-500 mt-1"></span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">상담 내용</label>
+                            <textarea name="message" required data-fs-field class="w-full px-4 py-2 border rounded-md h-32 focus:outline-blue-500" placeholder="문의하실 내용을 간단히 적어주세요"></textarea>
+                            <span data-fs-error="message" class="text-xs text-red-500 mt-1"></span>
+                        </div>
+                        <button type="submit" data-fs-submit-btn class="w-full bg-blue-600 text-white py-3 rounded-md font-bold hover:bg-blue-700 transition disabled:bg-gray-400">상담 신청하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-6">
+        <div class="max-w-7xl mx-auto text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8">
+            <div>
+                <h3 class="text-white font-bold text-xl mb-4">전국공공산업노동조합 건설산업분과 경기남부본부</h3>
+                <p class="text-sm">Copyright © 2024 Federation of Korean Public Trade Unions. All Rights Reserved.</p>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+                <a href="#" class="hover:text-white transition">이용약관</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.onscroll = function() {
+            var nav = document.getElementById('navbar');
+            if (window.pageYOffset > 100) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+        };
+
+        // Formspree Integration
+        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+        formspree('initForm', { 
+            formElement: '#contact-form', 
+            formId: 'xbdqbpwy',
+            onSuccess: function() {
+                document.getElementById('contact-form').reset();
+            }
+        });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
