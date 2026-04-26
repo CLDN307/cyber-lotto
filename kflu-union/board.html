@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판 - 경기남부본부</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md py-4 px-6 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="마크.jpg" alt="로고" class="h-10 w-10 object-contain rounded-full p-0.5 border">
+                <span class="font-bold text-lg tracking-tighter">전국공공노조 경기남부본부</span>
+            </a>
+            <div class="hidden md:flex gap-8 font-medium items-center">
+                <a href="index.html#home" class="text-gray-600 hover:text-blue-600 transition">홈</a>
+                <a href="index.html#about" class="text-gray-600 hover:text-blue-600 transition">본부소개</a>
+                <a href="index.html#gallery" class="text-gray-600 hover:text-blue-600 transition">활동현황</a>
+                <a href="board.html" class="text-blue-600 font-bold border-b-2 border-blue-600">자유게시판</a>
+                <a href="index.html#contact" class="text-gray-600 hover:text-blue-600 transition">오시는 길</a>
+                <div class="h-4 w-px bg-gray-300 mx-2"></div>
+                <div id="auth-buttons" class="hidden flex items-center gap-4">
+                    <button onclick="openModal('login-modal')" class="text-gray-600 hover:text-blue-600 transition">로그인</button>
+                    <button onclick="openModal('register-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition text-sm">회원가입</button>
+                </div>
+                <div id="user-info" class="hidden flex items-center gap-4">
+                    <span id="user-display-name" class="text-sm font-bold text-blue-600"></span>
+                    <button onclick="logout()" class="text-xs bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded transition">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24 pb-12 px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex justify-between items-end mb-8 border-b-2 border-blue-600 pb-4">
+                <div>
+                    <h1 class="text-3xl font-black text-gray-900">자유게시판</h1>
+                    <p class="text-gray-500 mt-2">조합원 여러분의 소중한 의견을 나누는 공간입니다.</p>
+                </div>
+                <button onclick="openWriteModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-lg transition flex items-center gap-2">
+                    <span>글쓰기</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </button>
+            </div>
+
+            <!-- Post List -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-100 border-b text-center">
+                        <tr>
+                            <th class="px-6 py-4 font-bold text-gray-700 w-16">번호</th>
+                            <th class="px-6 py-4 font-bold text-gray-700">제목</th>
+                            <th class="px-6 py-4 font-bold text-gray-700 w-32">작성자</th>
+                            <th class="px-6 py-4 font-bold text-gray-700 w-32">날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody id="post-list-body">
+                        <!-- Posts will be injected here -->
+                    </tbody>
+                </table>
+                <div id="no-posts" class="hidden py-20 text-center text-gray-400">
+                    등록된 게시물이 없습니다. 첫 번째 글을 남겨보세요!
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Write Modal -->
+    <div id="write-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="write-modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black opacity-50" onclick="closeWriteModal()"></div>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl z-10 overflow-hidden transform transition-all">
+                <div class="p-6 border-b flex justify-between items-center bg-blue-50">
+                    <h3 class="text-xl font-bold text-blue-900" id="write-modal-title">새 글 작성</h3>
+                    <button onclick="closeWriteModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <form id="write-form" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">제목</label>
+                        <input type="text" id="post-title" required class="w-full px-4 py-2 border rounded-lg focus:outline-blue-500" placeholder="제목을 입력하세요">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">내용</label>
+                        <textarea id="post-content" required class="w-full px-4 py-2 border rounded-lg h-64 focus:outline-blue-500 resize-none" placeholder="내용을 입력하세요"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4">
+                        <button type="button" onclick="closeWriteModal()" class="px-6 py-2 border rounded-lg font-bold text-gray-600 hover:bg-gray-50">취소</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-md">등록하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modal -->
+    <div id="view-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="view-modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black opacity-50" onclick="closeViewModal()"></div>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl z-10 overflow-hidden transform transition-all">
+                <div class="p-8">
+                    <div class="mb-6">
+                        <span id="view-date" class="text-sm text-gray-400"></span>
+                        <h2 id="view-title" class="text-3xl font-black mt-1 text-gray-900 leading-tight"></h2>
+                        <div class="flex items-center gap-2 mt-4 pb-4 border-b">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">작</div>
+                            <span id="view-author" class="font-bold text-gray-700"></span>
+                        </div>
+                    </div>
+                    <div id="view-content" class="text-gray-700 leading-relaxed whitespace-pre-wrap min-h-[300px]"></div>
+                    <div class="mt-8 pt-6 border-t flex justify-between items-center">
+                        <div id="post-owner-controls" class="hidden flex gap-3">
+                            <button onclick="window.handlePostEdit()" class="px-5 py-2 border border-blue-600 text-blue-600 rounded-lg font-bold hover:bg-blue-50 transition">수정</button>
+                            <button onclick="window.handlePostDelete()" class="px-5 py-2 border border-red-500 text-red-500 rounded-lg font-bold hover:bg-red-50 transition">삭제</button>
+                        </div>
+                        <button onclick="closeViewModal()" class="px-8 py-2.5 bg-gray-800 text-white rounded-lg font-bold hover:bg-gray-900 transition shadow-md">목록으로</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal (Same as index.html) -->
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="login-modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75" onclick="closeModal('login-modal')"></div>
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md z-10 overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900" id="login-modal-title">로그인</h3>
+                        <button onclick="closeModal('login-modal')" class="text-gray-400 hover:text-gray-600">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    <form id="login-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">아이디 (이메일)</label>
+                            <input type="email" id="login-email" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="example@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">비밀번호</label>
+                            <input type="password" id="login-password" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="w-full py-3 mt-4 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">로그인</button>
+                    </form>
+                    <div class="mt-6 text-center text-sm text-gray-500">
+                        계정이 없으신가요? <button onclick="closeModal('login-modal'); openModal('register-modal')" class="text-blue-600 font-bold hover:underline">회원가입</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal (Same as index.html) -->
+    <div id="register-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="register-modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75" onclick="closeModal('register-modal')"></div>
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md z-10 overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900" id="register-modal-title">회원가입</h3>
+                        <button onclick="closeModal('register-modal')" class="text-gray-400 hover:text-gray-600">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    <form id="register-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">이름</label>
+                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="홍길동">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">아이디 (이메일)</label>
+                            <input type="email" id="reg-email" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="example@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">비밀번호</label>
+                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="8자 이상 입력하세요">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">비밀번호 확인</label>
+                            <input type="password" id="reg-confirm" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="비밀번호를 다시 입력하세요">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">연락처</label>
+                            <input type="tel" id="reg-phone" required class="w-full px-4 py-2 border rounded-md focus:outline-blue-500" placeholder="010-0000-0000">
+                        </div>
+                        <div class="flex items-start mt-2">
+                            <input type="checkbox" class="mt-1 mr-2" required>
+                            <span class="text-sm text-gray-600 underline cursor-pointer">이용약관 및 개인정보 처리방침에 동의합니다.</span>
+                        </div>
+                        <button type="submit" class="w-full py-3 mt-4 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">가입하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication Management
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('kflu_user'));
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            const displayName = document.getElementById('user-display-name');
+
+            if (user) {
+                authButtons.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                displayName.textContent = user.name + '님';
+                return user;
+            } else {
+                authButtons.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+                return null;
+            }
+        }
+
+        let currentUser = checkAuth();
+        let currentViewingIndex = -1; 
+        let editingIndex = -1;
+
+        function logout() {
+            localStorage.removeItem('kflu_user');
+            location.reload();
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            if (!document.querySelector('[role="dialog"]:not(.hidden)')) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal when pressing Esc
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('[role="dialog"]').forEach(modal => {
+                    if (!modal.classList.contains('hidden')) {
+                        closeModal(modal.id);
+                    }
+                });
+            }
+        });
+
+        // Handle Login Submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const users = JSON.parse(localStorage.getItem('kflu_users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('kflu_user', JSON.stringify({ name: user.name, email: user.email }));
+                alert(user.name + '님, 환영합니다!');
+                closeModal('login-modal');
+                currentUser = checkAuth();
+            } else {
+                alert('이메일 또는 비밀번호가 올바르지 않습니다.');
+            }
+        });
+
+        // Handle Register Submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (password !== confirm) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('kflu_users')) || [];
+            if (users.find(u => u.email === email)) {
+                alert('이미 가입된 이메일입니다.');
+                return;
+            }
+
+            users.push({ name, email, password });
+            localStorage.setItem('kflu_users', JSON.stringify(users));
+            alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+            closeModal('register-modal');
+            openModal('login-modal');
+        });
+
+        // Board Logic
+        let posts = JSON.parse(localStorage.getItem('kflu_posts')) || [];
+
+        function renderPosts() {
+            const listBody = document.getElementById('post-list-body');
+            const noPosts = document.getElementById('no-posts');
+            if (!listBody) return;
+            listBody.innerHTML = '';
+
+            // --- 고정 공지사항 추가 ---
+            const announcementTr = document.createElement('tr');
+            announcementTr.className = 'bg-blue-50 border-b hover:bg-blue-100 cursor-pointer transition font-bold';
+            announcementTr.onclick = () => {
+                document.getElementById('view-title').textContent = '경기남부 홈페이지 및 내부정보통신망 운영규칙';
+                document.getElementById('view-author').textContent = '본부 관리자';
+                document.getElementById('view-date').textContent = '공지';
+                document.getElementById('view-content').textContent = `제7조 [게시물의 삭제]
+홈페이지 자유게시판은 자율운영을 원칙으로 하되, 홈페이지 관리자는 특정 개인 및 단체에 대한 비방.비하 및 허위사실 유포 등에 의한 피해를 사전에 방지하고, 건전한 정보통신윤리를 확립하기 위하여 다음 각 호의 게시물 삭제기준에 따라 삭제할 수 있다.
+
+1. 특정인의 개인정보(실명, 상호명, 사진, 전화번호, 주민등록번호 등)가 공개되는 경우
+2. 제목 또는 내용이 욕설.음란한 표현 등을 담고 있는 경우
+3. 특정 개인 및 단체를 비방 또는 비하하거나 허위 및 확인되지 않은 사실을 유포하는 경우
+4. 광고성 게시물에 해당하는 경우
+5. 동일한 내용을 3회 이상 반복하여 올리는 경우
+6. 저작권이 침해된 경우
+7. 기타 관련 법령 및 통신윤리에 어긋나는 경우 등`;
+                document.getElementById('post-owner-controls').classList.add('hidden');
+                openViewModal();
+            };
+            announcementTr.innerHTML = `
+                <td class="px-6 py-4 text-center text-blue-600"><span class="bg-blue-600 text-white px-2 py-1 rounded text-xs">공지</span></td>
+                <td class="px-6 py-4 text-blue-900">경기남부 홈페이지 및 내부정보통신망 운영규칙</td>
+                <td class="px-6 py-4 text-center text-gray-600">관리자</td>
+                <td class="px-6 py-4 text-center text-gray-400 text-sm">-</td>
+            `;
+            listBody.appendChild(announcementTr);
+            // ------------------------
+
+            if (posts.length === 0) {
+                noPosts.classList.remove('hidden');
+                return;
+            }
+
+            noPosts.classList.add('hidden');
+            posts.slice().reverse().forEach((post, index) => {
+                const actualIndex = posts.length - 1 - index;
+                const tr = document.createElement('tr');
+                tr.className = 'border-b hover:bg-gray-50 cursor-pointer transition';
+                tr.onclick = () => viewPost(actualIndex);
+                tr.innerHTML = `
+                    <td class="px-6 py-4 text-center text-gray-500">${posts.length - index}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">${post.title}</td>
+                    <td class="px-6 py-4 text-center text-gray-600">${post.author}</td>
+                    <td class="px-6 py-4 text-center text-gray-400 text-sm">${post.date}</td>
+                `;
+                listBody.appendChild(tr);
+            });
+        }
+
+        function openWriteModal(isEdit = false) {
+            if (!currentUser) {
+                openModal('login-modal');
+                return;
+            }
+            const modalTitle = document.querySelector('#write-modal h3');
+            const submitBtn = document.querySelector('#write-form button[type="submit"]');
+            
+            if (isEdit) {
+                modalTitle.textContent = '게시글 수정';
+                submitBtn.textContent = '수정 완료';
+            } else {
+                modalTitle.textContent = '새 글 작성';
+                submitBtn.textContent = '등록하기';
+                editingIndex = -1;
+                document.getElementById('write-form').reset();
+            }
+            
+            document.getElementById('write-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWriteModal() {
+            document.getElementById('write-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('write-form').reset();
+            editingIndex = -1;
+        }
+
+        function openViewModal() {
+            document.getElementById('view-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewModal() {
+            document.getElementById('view-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('write-form').onsubmit = (e) => {
+            e.preventDefault();
+            if (!currentUser) {
+                openModal('login-modal');
+                return;
+            }
+
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+
+            if (editingIndex > -1) {
+                // 수정
+                posts[editingIndex].title = title;
+                posts[editingIndex].content = content;
+                alert('게시글이 수정되었습니다.');
+            } else {
+                // 신규 등록
+                const newPost = {
+                    title: title,
+                    content: content,
+                    author: currentUser.name,
+                    date: new Date().toLocaleDateString('ko-KR'),
+                    timestamp: new Date().getTime()
+                };
+                posts.push(newPost);
+            }
+            
+            localStorage.setItem('kflu_posts', JSON.stringify(posts));
+            renderPosts();
+            closeWriteModal();
+        };
+
+        function viewPost(index) {
+            if (!currentUser) {
+                openModal('login-modal');
+                return;
+            }
+            const post = posts[index];
+            if (!post) return;
+
+            currentViewingIndex = index;
+
+            document.getElementById('view-title').textContent = post.title;
+            document.getElementById('view-author').textContent = post.author + '님';
+            document.getElementById('view-date').textContent = post.date;
+            document.getElementById('view-content').textContent = post.content;
+            
+            const ownerControls = document.getElementById('post-owner-controls');
+            if (post.author === currentUser.name) {
+                ownerControls.classList.remove('hidden');
+            } else {
+                ownerControls.classList.add('hidden');
+            }
+            
+            openViewModal();
+        }
+
+        // 전역 함수로 노출하여 확실한 작동 보장
+        window.handlePostEdit = function() {
+            if (currentViewingIndex === -1) return;
+            const post = posts[currentViewingIndex];
+            editingIndex = currentViewingIndex;
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-content').value = post.content;
+            closeViewModal();
+            openWriteModal(true);
+        };
+
+        window.handlePostDelete = function() {
+            if (currentViewingIndex === -1) {
+                alert('게시글 정보를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 확인 창 없이 즉시 삭제 실행
+            posts.splice(currentViewingIndex, 1);
+            localStorage.setItem('kflu_posts', JSON.stringify(posts));
+            alert('게시글이 삭제되었습니다.');
+            
+            currentViewingIndex = -1;
+            closeViewModal();
+            renderPosts();
+        };
+
+        renderPosts();
+    </script>
+</body>
+</html>
